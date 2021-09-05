@@ -1,1 +1,1 @@
-# [Projects]() / [Articles]() / [Contact]()
+## [Projects]() / [Articles]()
