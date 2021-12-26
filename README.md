@@ -1,9 +1,5 @@
-Website to show the projects that I have been working on and share knowledge.
+Personal website to showcase projects I have worked on and share some knowledge :)
 
-### [Articles](articles.md)
-
-Articles on graphics/programming related topics
-
-### Projects
-
-- [**Software Renderer**](software-renderer.md)
+- [**Projects**](projects/projects.md)
+- [**Articles**](articles/articles.md)
+- [**Contact**](about.md)
