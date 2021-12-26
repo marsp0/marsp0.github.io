@@ -1,3 +1,3 @@
 ### Projects
 
-- [**Software Renderer**](projects/software-renderer.md)
+- [**Software Renderer**](software-renderer.md)
