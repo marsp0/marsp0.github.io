@@ -132,7 +132,7 @@ Example:
 
 Both (2, 2) and (-2, 2) are in the same coordinate system.
 ```
-![gifsmos](https://user-images.githubusercontent.com/7538637/149636321-248138fe-f2dc-4a10-8894-11cf893c1947.gif)
+![gifsmos](assets/deriving-camera-transform/active_transform.gif)
 
 #### Passive Transformation interpretation
 
@@ -146,7 +146,8 @@ Example:
 (2,2) - vector described with respect to basis B
 (-2,2) - same vector but described with respect to the natural basis
 ```
-![passive_transform](https://user-images.githubusercontent.com/7538637/150543786-b0b174e1-79df-4e8f-a7a0-5015b6d22f1d.gif)
+![passive_transform](assets/deriving-camera-transform/passive_transform.gif)
+
 The first part of the gif shows the vector with respect to basis `B` and the second part shows the same vector with respect to basis `E`. As you can see the axes rotate (x - red, y - green).
 
 ### Camera Transform aka the View Matrix
@@ -170,7 +171,7 @@ The order of the vectors in the cross product operation depends on [the right ha
 -- First Person Camera --
 We are going to use [Euler angles](https://en.wikipedia.org/wiki/Euler_angles) for this type of camera. We will use only the **pitch** and **yaw** angles (**no roll**). The pitch will represent a rotation about the x axis and yaw will be a rotation about the y axis (see the image below for reference). We want the camera forward vector to point in the negative Z axis (OpenGL convention) so we will use `(0,0,-1)` as our initial direction.
 
-![roll_pitch_yaw_rotations](https://user-images.githubusercontent.com/7538637/150677111-acfc7239-b9b9-4cfb-ae7c-9fa8dbc64baa.png)
+![roll_pitch_yaw_rotations](assets/deriving-camera-transform/roll_pitch_yaw_rotations.png)
 ```
           cos(yaw)  0  sin(yaw)    1           0           0     0
 forward =        0  1         0 *  0  cos(pitch) -sin(pitch)  *  0
@@ -260,7 +261,7 @@ CamWorld = (5,2,1)
 cam2world - transform from camera coordinate space to world coordinate space
 world2cam - inverse(cam2world) ; transform from world space to camera space
 ```
-![Screenshot 2022-01-25 at 13-40-20 3D Calculator - GeoGebra](https://user-images.githubusercontent.com/7538637/150975483-573466d7-afeb-4b62-a0c6-e64a8a49189c.png)
+![Screenshot 2022-01-25 at 13-40-20 3D Calculator - GeoGebra](assets/deriving-camera-transform/world2camExample.png)
 Task #1: Express the point in camera space
 1. First we move the point to be relative to the camera
 	`relativePoint = Pworld - CamWorld`
