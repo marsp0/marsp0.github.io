@@ -6,6 +6,8 @@ Personal website to showcase projects I have worked on and share some knowledge 
 
 ## Articles
 
+- [Deriving Camera Transform](deriving-camera-transform.md)
+
 ## Contact
 
 - Mail: [martin.n.spasov@gmail.com](mailto:martin.n.spasov@gmail.com)
