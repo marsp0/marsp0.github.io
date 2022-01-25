@@ -13,8 +13,12 @@ The first topic I want to talk about is **change of basis**. A basis is a set of
 Change of basis is the process that allows us to take a vector `v` that is in basis `A` and express it in basis `B`. Let's look at an example.
 
 `A` - basis for R<sup>3</sup> - `(2,1,0)`, `(0,0,1)`, `(1,-2,0)`
+
+
 `B` - basis for R<sup>3</sup> - `(1,1,1)`, `(1,-1,0)`, `(1,1,-2)`
+
 `v` - `(5,2,4)` - vector expressed in `A`. The full expression is thus
+
 ```
 v = 5 * (2,1,0) + 2 * (0,0,1) + 4 * (1,-2,0)
 ```
@@ -159,6 +163,7 @@ With the previous two sections covered we are now ready to talk about the camera
 Depending on the type of camera there are different ways we can derive the basis vectors
 
 -- LookAt Camera --
+
 In this case the camera *looks at* a target (World of Warcraft, New World etc). Getting the basis vectors is pretty straight forward.
 ```
 forward = normalize(cameraPosition - targetPosition)
@@ -169,6 +174,7 @@ up = normalize(cross(forward, right))
 The order of the vectors in the cross product operation depends on [the right hand rule](https://en.wikipedia.org/wiki/Cross_product#Direction). Also keep in mind that the forward vector points **towards** the camera.
 
 -- First Person Camera --
+
 We are going to use [Euler angles](https://en.wikipedia.org/wiki/Euler_angles) for this type of camera. We will use only the **pitch** and **yaw** angles (**no roll**). The pitch will represent a rotation about the x axis and yaw will be a rotation about the y axis (see the image below for reference). We want the camera forward vector to point in the negative Z axis (OpenGL convention) so we will use `(0,0,-1)` as our initial direction.
 
 ![roll_pitch_yaw_rotations](assets/deriving-camera-transform/roll_pitch_yaw_rotations.png)
@@ -264,14 +270,20 @@ world2cam - inverse(cam2world) ; transform from world space to camera space
 ![Screenshot 2022-01-25 at 13-40-20 3D Calculator - GeoGebra](assets/deriving-camera-transform/world2camExample.png)
 Task #1: Express the point in camera space
 1. First we move the point to be relative to the camera
+
 	`relativePoint = Pworld - CamWorld`
+
 2. Next we apply the change of basis
+
 	`pointCamSpace = world2cam * relativePoint`
 
 Task #2: Express the `pointCamSpace` in world coordinate system
 1. First we apply the inverse of the `world2cam` transform
+	
 	`relativePoint = cam2world * pointCamSpace`
+
 2. Next we apply the translation to make the point relative to the world and not the camera
+
 	`Pworld = relativePoint + CamWorld` 
 
 As you can see the above steps match the matrix multiplication order that we got previously.
