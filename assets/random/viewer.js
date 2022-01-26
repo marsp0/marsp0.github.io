@@ -161,7 +161,7 @@ function updateGraph(allProfileLines)
                         .minFrameSize(0)
                         .setColorHue("aqua")
     // tooltip
-    var tip = flamegraph.tooltip.defaultFlamegraphTooltip().text(d => d.data.name.split("(")[0] + ": " + d.data.value.toFixed(4));
+    var tip = flamegraph.tooltip.defaultFlamegraphTooltip().text(d => d.data.name.split("(")[0] + ": " + d.data.value.toFixed(3));
     graph.tooltip(tip)
     d3.select("#chart").datum(allProfileLines[1]).call(graph);
 }
