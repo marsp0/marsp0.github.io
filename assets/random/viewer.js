@@ -19,17 +19,7 @@ var CHILD_TIME_IN_CHILDREN = 2
 
 var id2index = new Map();
 
-var graph = flamegraph().transitionDuration(750)
-                        .minFrameSize(5)
-                        .transitionEase(d3.easeCubic)
-                        .sort(true)
-                        .title("Call Graph")
-                        .minFrameSize(0)
-                        .setColorHue("aqua")
-// tooltip
-var tip = flamegraph.tooltip.defaultFlamegraphTooltip().text(d => d.data.name.split("(")[0] + ": " + d.data.value.toFixed(4));
-graph.tooltip(tip)
-d3.select("#chart").datum({}).call(graph);
+var graph = null;
 
 class ProfileLine
 {
@@ -51,6 +41,10 @@ function onFileSelect(event)
 {
     // clean up previous run
     id2index = new Map();
+    if (graph)
+    {
+        graph.destroy()
+    }
 
     var selectedFile = event.target.files[0];
     var reader = new FileReader();
@@ -159,5 +153,15 @@ function updateGraph(allProfileLines)
     }
 
     // creates the flamegraph
-    graph.update(allProfileLines[1])
+    graph = flamegraph().transitionDuration(750)
+                        .minFrameSize(5)
+                        .transitionEase(d3.easeCubic)
+                        .sort(true)
+                        .title("Call Graph")
+                        .minFrameSize(0)
+                        .setColorHue("aqua")
+    // tooltip
+    var tip = flamegraph.tooltip.defaultFlamegraphTooltip().text(d => d.data.name.split("(")[0] + ": " + d.data.value.toFixed(4));
+    graph.tooltip(tip)
+    d3.select("#chart").datum(allProfileLines[1]).call(graph);
 }
