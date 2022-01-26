@@ -136,7 +136,7 @@ Example:
 
 Both (2, 2) and (-2, 2) are in the same coordinate system.
 ```
-![gifsmos](assets/deriving-camera-transform/active_transform.gif)
+![gifsmos](../assets/deriving-camera-transform/active_transform.gif)
 
 #### Passive Transformation interpretation
 
@@ -150,7 +150,7 @@ Example:
 (2,2) - vector described with respect to basis B
 (-2,2) - same vector but described with respect to the natural basis
 ```
-![passive_transform](assets/deriving-camera-transform/passive_transform.gif)
+![passive_transform](../assets/deriving-camera-transform/passive_transform.gif)
 
 The first part of the gif shows the vector with respect to basis `B` and the second part shows the same vector with respect to basis `E`. As you can see the axes rotate (x - red, y - green).
 
@@ -177,7 +177,7 @@ The order of the vectors in the cross product operation depends on [the right ha
 
 We are going to use [Euler angles](https://en.wikipedia.org/wiki/Euler_angles) for this type of camera. We will use only the **pitch** and **yaw** angles (**no roll**). The pitch will represent a rotation about the x axis and yaw will be a rotation about the y axis (see the image below for reference). We want the camera forward vector to point in the negative Z axis (OpenGL convention) so we will use `(0,0,-1)` as our initial direction.
 
-![roll_pitch_yaw_rotations](assets/deriving-camera-transform/roll_pitch_yaw_rotations.png)
+![roll_pitch_yaw_rotations](../assets/deriving-camera-transform/roll_pitch_yaw_rotations.png)
 ```
           cos(yaw)  0  sin(yaw)    1           0           0     0
 forward =        0  1         0 *  0  cos(pitch) -sin(pitch)  *  0
@@ -267,7 +267,7 @@ CamWorld = (5,2,1)
 cam2world - transform from camera coordinate space to world coordinate space
 world2cam - inverse(cam2world) ; transform from world space to camera space
 ```
-![Screenshot 2022-01-25 at 13-40-20 3D Calculator - GeoGebra](assets/deriving-camera-transform/world2camExample.png)
+![Screenshot 2022-01-25 at 13-40-20 3D Calculator - GeoGebra](../assets/deriving-camera-transform/world2camExample.png)
 Task #1: Express the point in camera space
 1. First we move the point to be relative to the camera
 
