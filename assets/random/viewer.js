@@ -29,7 +29,7 @@ var graph = flamegraph().transitionDuration(750)
 // tooltip
 var tip = flamegraph.tooltip.defaultFlamegraphTooltip().text(d => d.data.name.split("(")[0] + ": " + d.data.value.toFixed(4));
 graph.tooltip(tip)
-d3.select("#chart").datum(object).call(graph);
+d3.select("#chart").datum({}).call(graph);
 
 class ProfileLine
 {
