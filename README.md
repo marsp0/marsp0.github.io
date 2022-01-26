@@ -10,7 +10,7 @@ Personal website to showcase projects I have worked on and share some knowledge 
 
 ## Random
 
-- [Simple GPROF viewer](random/gprof-viewer.md)
+- [Gprof Viewer](random/gprof-viewer.md)
 
 ## Contact
 
