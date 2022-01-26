@@ -51,9 +51,8 @@ function onFileSelect(event)
 {
     // clean up previous run
     id2index = new Map();
-    clearGraph()
 
-	var selectedFile = event.target.files[0];
+    var selectedFile = event.target.files[0];
     var reader = new FileReader();
     reader.onload = function(event) 
     {
