@@ -26,11 +26,10 @@ var graph = flamegraph().transitionDuration(750)
                         .title("Call Graph")
                         .minFrameSize(0)
                         .setColorHue("aqua")
-
-function clearGraph()
-{
-    graph.destroy()
-}
+// tooltip
+var tip = flamegraph.tooltip.defaultFlamegraphTooltip().text(d => d.data.name.split("(")[0] + ": " + d.data.value.toFixed(4));
+graph.tooltip(tip)
+d3.select("#chart").datum(object).call(graph);
 
 class ProfileLine
 {
@@ -161,13 +160,5 @@ function updateGraph(allProfileLines)
     }
 
     // creates the flamegraph
-    object = allProfileLines[1]
-
-    // tooltip
-    var tip = flamegraph.tooltip.defaultFlamegraphTooltip()
-                                .text(d => d.data.name.split("(")[0] + ": " + d.data.value.toFixed(4));
-
-    graph.tooltip(tip)
-
-    d3.select("#chart").datum(object).call(graph);
+    graph.update(allProfileLines[1])
 }
