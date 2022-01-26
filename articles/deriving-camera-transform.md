@@ -297,3 +297,18 @@ This pretty much concludes the post on the camera transform, leave a comment bel
 - [Lookat derivation (World space -> Camera space)](http://www.songho.ca/opengl/gl_camera.html)
 - [Free camera](https://learnopengl.com/Getting-started/Camera)
 - [Euler to direction vector (explains the LearnOpenGL article formula)](https://math.stackexchange.com/questions/1791209/euler-angle-to-direction-vector-which-is-right)
+
+<script src="https://giscus.app/client.js"
+        data-repo="marsp0/marsp0.github.io"
+        data-repo-id="MDEwOlJlcG9zaXRvcnk0MDMyNDUyODk="
+        data-category="General"
+        data-category-id="DIC_kwDOGAkI6c4CAkj0"
+        data-mapping="pathname"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
