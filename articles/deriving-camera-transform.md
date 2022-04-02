@@ -268,23 +268,24 @@ cam2world - transform from camera coordinate space to world coordinate space
 world2cam - inverse(cam2world) ; transform from world space to camera space
 ```
 ![Screenshot 2022-01-25 at 13-40-20 3D Calculator - GeoGebra](../assets/deriving-camera-transform/world2camExample.png)
+
 Task #1: Express the point in camera space
+```
 1. First we move the point to be relative to the camera
-
-	`relativePoint = Pworld - CamWorld`
-
 2. Next we apply the change of basis
 
-	`pointCamSpace = world2cam * relativePoint`
+relativePoint = Pworld - CamWorld
+pointCamSpace = world2cam * relativePoint
+```
 
 Task #2: Express the `pointCamSpace` in world coordinate system
+```
 1. First we apply the inverse of the `world2cam` transform
-	
-	`relativePoint = cam2world * pointCamSpace`
-
 2. Next we apply the translation to make the point relative to the world and not the camera
 
-	`Pworld = relativePoint + CamWorld` 
+relativePoint = cam2world * pointCamSpace
+Pworld = relativePoint + CamWorld
+```
 
 As you can see the above steps match the matrix multiplication order that we got previously.
 
