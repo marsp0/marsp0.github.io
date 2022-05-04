@@ -2,7 +2,7 @@ Personal website to showcase projects I have worked on and share some knowledge 
 
 ## Projects
 
-- [**Software Renderer**](https://github.com/marsp0/software-renderer)
+- [**Phong Software Renderer**](https://github.com/marsp0/software-renderer)
 
 ## Articles
 
