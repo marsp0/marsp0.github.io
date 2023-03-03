@@ -7,6 +7,7 @@ Personal website to showcase projects I have worked on and share some knowledge 
 ## Articles
 
 - [Deriving Camera Transform](articles/deriving-camera-transform.md)
+- [Simple JSON Parser](articles/simple-json-parser.md)
 
 ## Random
 
