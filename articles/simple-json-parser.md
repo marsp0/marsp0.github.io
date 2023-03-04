@@ -705,4 +705,4 @@ Im guessing that there will be bugs with edge cases but ill fix them as i encoun
 - smarter string storing - it might be a good idea to store repeating strings once instead of duplicating them
 - improved find methods - I'd like to have a single method that can take both keys and indices as arguments
 
-Comments and suggestions are welcomed [here](https://github.com/marsp0/marsp0.github.io/issues/3) or you can send me an email(see home page).
+Comments and suggestions are welcomed [here](https://github.com/marsp0/marsp0.github.io/discussions/4) or you can send me an email(see home page).
