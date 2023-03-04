@@ -4,11 +4,11 @@ _03.03.2023_
 
 In this post I'll talk about a simple JSON parser I implemented for a project that I'm working on. I didn't want this to be a fully featured library like [cJSON](https://github.com/DaveGamble/cJSON) but rather a simple and easy to use parser. To keep the code straightforward i've made some assumptions that a generic library like cJSON might not be able to make:
 
-- the raw buffer can fit in memory
-- the json contains only **ASCII** chars
-- the raw buffer contains valid json. Since im parsing `glb` files im assuming that the json inside them is valid
+- the buffer can fit in memory
+- the buffer contains only **ASCII** characters
+- the buffer contains valid json. Since im parsing `glb` files im assuming that the json inside them is valid. The buffer has to contain at least a root node `{}`. Nothing else is supported at top level (not even an empty string).
 
-The code is single threaded and does not support exporting/creation of json objects, all it does is it takes in a buffer and parses it. The code works in two stages where each stage iterates over the entire buffer. The first stage calculates and allocates the memory needed for the entire json tree and the second stage parses the tree. The idea is to make the memory allocation more efficient by precalculating the amount of memory needed for both strings and nodes and allocating two big chunks instead of doing per node allocation. 
+The code is single threaded and does not support the creation and exporting of json trees, all it does is it takes in a buffer and parses it. The code works in two stages where each stage iterates over the entire buffer. The first stage calculates and allocates the memory needed for the entire json tree and the second stage parses the tree. The idea is to make the memory allocation more efficient by precalculating the amount of memory needed for both strings and nodes and allocating two big chunks instead of doing per node allocation. 
 
 The first thing we can look at is the header file `json.h`
 
@@ -153,7 +153,11 @@ All these static variables are here to avoid passing them as parameters to the s
 
 ### First stage - memory allocation
 
-During the first stage the code iterates over the buffer and calculates how much space is going to be needed for strings and nodes. 
+During the first stage the code iterates over the buffer and calculates how much space is going to be needed for strings and nodes.
+
+Strings - everything between quotes is counted as part of the string. The only special case are escaped double quotes. They need special care to prevent the string counter from stopping prematurely. The code has to also allocate a single byte instead of two.
+
+Nodes - the code uses symbols `,`, `]` and `}` to count the elements. The root node is always present, the comma is used to count internal elements to both objects and arrays and the closing brackets/parenthesis are used to count the final element of the container. Brackets/parenthesis inside the strings are skipped.
 
 ```c
 //json.c
@@ -176,21 +180,42 @@ static void allocate(void)
 
         // string allocation
         if (c == '"' && status == BEFORE_KEY)
+        {
             status = IN_KEY;
+        }
         else if (c == '"' && status == IN_KEY) 
-            status = buffer[cursor - 1] != '\\' ? BEFORE_KEY : IN_KEY;    <- handles case when we have a quote inside the string
+        {
+            status = BEFORE_KEY;
+        }
         else if (status == IN_KEY)
+        {
             ssize++;
 
+            // handle escape sequences
+            t = buffer[cursor + 1];
+
+            if (c == '\\' && (t == '"' || t == '\\'|| 
+                              t == 't' || t == 'b' || 
+                              t == 'f' || t == 'n' || 
+                              t == 'r'))
+            {
+                cursor++;
+            }
+        }
+
         // node allocation
-        if (c == ',' || c == ']' || c == '}')
+        if (status != IN_KEY && (c == ',' || c == ']' || c == '}'))
+        {
             nsize += 1;
-        else if (c == '[' || c == '{')
+        }
+        else if (status != IN_KEY && (c == '[' || c == '{'))
         {
             t = c == '[' ? ']' : '}';
             
             if (skip_if_empty(t))
+            {
                 continue;
+            }
         }
 
         cursor++;
@@ -209,16 +234,13 @@ static void allocate(void)
 }
 ```
 
-`ssize` counts everything between quotes (even escaped quotes) as part of the string.
-`nsize` incremets if a coma or closing brackets/parenthesis is encountered.
-
 ### Second stage - parsing
 
 The parsing is done by keeping track of next available node slot and string slot. Every parse function takes a node index as argument and uses that to access the appropriate node. All nodes are parsed recursively.
 
 #### Objects
 
-The function below continues to parse the children of the object until it sees a closing bracket. First we parse the key and set some meta data (pointer back to parent + size increase) and then the value is parsed. `parse_value` calls a different function based on the value that we are parsing.
+The function below continues to parse the children of the object until it sees a closing bracket. The code parses first the key and sets the pointers to the parent/child/sibling. The value is parsed right after. `parse_value` calls a different function based on the value that is being parsed.
 
 ```c
 static void parse_object(uint32_t index)
@@ -299,7 +321,7 @@ static void parse_value(uint32_t index)
 
 #### Arrays
 
-The code is similar to that of `parse_object` but we dont have a key to parse. Parent pointer + size are still updated as we parse the children.
+The code is similar to that of `parse_object` but there is no key to be parsed. Parent/sibling pointers are still updated as the children are being parsed.
 
 ```c
 static void parse_array(uint32_t index)
@@ -343,7 +365,7 @@ static void parse_array(uint32_t index)
 
 #### Numbers
 
-Number parsing relies on the builtin functions `atoi` and `atof`. Besides calling those functions the code has to move the cursor to the end number.
+Number parsing relies on the builtin functions `atoi` and `atof`. Besides calling those functions the code has to move the cursor past the number.
 
 ```c
 static void parse_number(uint32_t index)
@@ -385,70 +407,72 @@ static void parse_string(unsigned char** value, uint32_t* size)
 {
 
     unsigned char c;
+    unsigned char n;
+    unsigned char t;
+    uint32_t start = string_index;
+    uint32_t count = 0;
 
-    bool run        = true;
-    bool memcopy    = true;
-    uint32_t start  = 0;
-    uint32_t end    = 0;
-    status_e status = BEFORE_KEY;
+    cursor++;
 
-    // find beginning and end of string
-    while (run)
+    while (cursor < buffer_size)
     {
         c = buffer[cursor];
+        t = c;
 
-        if (c == '"' && status == BEFORE_KEY)
+        if (c == '"')
         {
-            start = cursor + 1;
-            status = IN_KEY;
+            break;
         }
-        else if (c == '"' && status == IN_KEY)
+        
+        if (c == '\\')
         {
-            if (buffer[cursor - 1] == '\\')
+            n = buffer[cursor + 1];
+            if (n == '"')
             {
-                memcopy = false;
+                t = '"';
             }
-            else
+            else if (n == '\\')
             {
-                end = cursor;
-                run = false;
+                t = '\\';
             }
-        }
+            else if (n == 'b')
+            {
+                t = '\b';
+            }
+            else if (n == 'f')
+            {
+                t = '\f';
+            }
+            else if (n == 'n')
+            {
+                t = '\n';
+            }
+            else if (n == 'r')
+            {
+                t = '\r';
+            }
+            else if (n == 't')
+            {
+                t = '\t';
+            }
 
+            cursor++;
+        }
+        
+        strings[string_index] = t;
+        
+        string_index++;
+        count++;
         cursor++;
     }
 
-    // copy string into string buffer
-    if (memcopy)
+    cursor++;
+
+    if (count)
     {
-        *size = end - start;
-        *value = &strings[string_index];
-
-        memcpy(*value, &buffer[start], *size);
-        string_index += *size;
-
-        return;
+        *size = count;
+        *value = &strings[start];
     }
-
-    // copy manually due to escaped quotes
-    uint32_t count = 0;
-    *value = &strings[string_index];
-
-    for (uint32_t i = start; i < end; i++)
-    {
-
-        if (buffer[i] == '"' && buffer[i - 1] == '\\')
-        {
-            string_index--;
-            count--;
-        }
-
-        strings[string_index] = buffer[i];
-        string_index++;
-        count++;
-    }
-
-    *size = count;
 }
 
 static void parse_string_key(uint32_t index)
@@ -465,9 +489,9 @@ static void parse_string_value(uint32_t index)
 
 #### Utility
 
-`is_real` helps determine if the code should parse an int or a float
-`skip_if_empty` helps skip empty containers. Used when parsing and when determining the size of the nodes.
-`skip_whitespace` used to advance the cursor between keys and values
+- `is_real` helps determine if the code should parse an int or a float
+- `skip_if_empty` helps skip empty containers. Used when parsing and when determining the size of the nodes.
+- `skip_whitespace` used to advance the cursor between keys and values
 
 ```c
 
@@ -521,9 +545,9 @@ static void skip_whitespace(void)
 
 The accessing of elements in the json tree is done with three main functions.
 
-`json_find_node` - uses variadic arguments to access nested elements in the tree. Sadly it cannot mix indices with keys.
-`json_find_child` - access direct children of a JSON_OBJECT node.
-`json_find_index` - access index from a JSON_ARRAY node.
+- `json_find_node` - uses variadic arguments to access nested elements in the tree. Sadly it cannot mix indices with keys.
+- `json_find_child` - access direct children of a JSON_OBJECT node.
+- `json_find_index` - access index from a JSON_ARRAY node.
 
 ```c
 
@@ -668,10 +692,11 @@ static void test_find_array_element(void)
 
 ### Stats - Parsing
 
-| JSON File | File Size | Time (ms) | Memory |
+| JSON File | File Size (KB) | Time (ms) | Memory (KB) |
 | - | - | - | - |
-| [canada.json](https://github.com/mloskot/json_benchmark/blob/master/data/canada.json) | 2199KB | `46ms` | `9143KB`|
-| [citm_catalog.json](https://github.com/RichardHightower/json-parsers-benchmark/blob/master/data/citm_catalog.json) | 1737KB | `19ms` | `2283KB`|
+| [citm_catalog.json](https://github.com/RichardHightower/json-parsers-benchmark/blob/master/data/citm_catalog.json) | `1737` | `19` | `2283`|
+| [canada.json](https://github.com/mloskot/json_benchmark/blob/master/data/canada.json) | `2199` | `46` | `9143`|
+| [large-file.json](https://github.com/json-iterator/test-data/blob/master/large-file.json) | `25528` | `290` | `56426` |
 
 ### Notes
 
