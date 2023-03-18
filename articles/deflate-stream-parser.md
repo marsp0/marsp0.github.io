@@ -855,7 +855,7 @@ As you can see the values of the alphabet are only at the leaf nodes. Here is th
 |17|`1111`|`4`|
 |18|`10`|`2`|
 
-With the CL alphabet in place we can start parsing the lengths of the LL and D alphabets. The first code we parse is 18 (`10`). This code means we have to repeat `0` length X number of times. X is equal to 11 + 7bits (LSB order).
+With the CL alphabet in place we can start parsing the lengths of the LL and D alphabets. The idea is to parse a bit and look it up in the tree, then repeat the same process until we reach a leaf node. The first code we parse is 18 (`10`). This code means we have to repeat `0` length X number of times. X is equal to 11 + 7bits (LSB order).
 
 ```mermaid
 %%{init: { 'theme':'forest' } }%%
@@ -880,8 +880,8 @@ graph
             JB(1010110)
             JBB(0)
         end
-        subgraph " "
-            CA(Code - `10`)
+        subgraph "Code (MSB)"
+            CA(10)
         end
 
         I --> IBF
@@ -915,7 +915,7 @@ graph
             LBF(01111111)
             MBF("Rest of the buffer")
         end
-        subgraph " "
+        subgraph "Number (LSB)"
             JB(1010110)
         end
 
@@ -929,7 +929,7 @@ graph
     end
 ```
 
-The 7 bits represent the number 86(`1010110`), so the total number becomes 97 (11 + 86). This means that the first 97 entries in the LL alphabet are 0. The second code that we parse is 1 (`1100`). This means that the 98th value has a Huffman code with length 1.
+The 7 bits represent the number 86(`1010110`), so the total number becomes 97 (11 + 86). This means that the first 97 entries in the LL alphabet have code length of 0. The second code that we parse is 1 (`1100`). This means that the 98th value has a Huffman code with length 1.
 
 ```mermaid
 %%{init: { 'theme':'forest' } }%%
@@ -1010,9 +1010,119 @@ graph
     end
 ```
 
+Fourth code is 18 (`10`) so now we have to parse 7 bits to figure out how many times we have to repeat 0. The 7 bits represent 127, so the total number becomes 11 + 127 = 138.
+
+```mermaid
+%%{init: { 'theme':'forest' } }%%
+graph
+    subgraph "Parsing LL - Fourth code - 10 (MSB)"
+        direction TB
+        subgraph " "
+            direction TB
+            K(a3)
+            L(7f)
+            M(88)
+            N(3d)
+            O("Rest of the buffer")
+            KBF(101)
+            LBF(01111111)
+            MBF(10001000)
+            NBF(00111101)
+            OBF("Rest of the buffer")
+        end
+        subgraph " "
+            KB(1)
+            KBB(01)
+        end
+        subgraph "Code (MSB)"
+            CA(10)
+        end
+
+        K --> KBF
+        L --> LBF
+        M --> MBF
+        N --> NBF
+        O --> OBF
+
+        KBF --> KB
+        KBF --> KBB
+        KBB --> CA
+    end
+```
+
+```mermaid
+%%{init: { 'theme':'forest' } }%%
+graph
+    subgraph "Parsing LL - 7 bits (LSB)"
+        direction TB
+        subgraph " "
+            direction TB
+            K(a3)
+            L(7f)
+            M(88)
+            N(3d)
+            O("Rest of the buffer")
+            KBF(101)
+            LBF(01111111)
+            MBF(10001000)
+            NBF(00111101)
+            OBF("Rest of the buffer")
+        end
+        subgraph " "
+            KB(1)
+            KBB(01)
+        end
+        subgraph "Code (MSB)"
+            CA(10)
+        end
+
+        K --> KBF
+        L --> LBF
+        M --> MBF
+        N --> NBF
+        O --> OBF
+
+        KBF --> KB
+        KBF --> KBB
+        KBB --> CA
+    end
+```
+
+Fifth code is 18 (`10`) again. and the 
 
 
+```mermaid
+%%{init: { 'theme':'forest' } }%%
+graph
+    subgraph "Parsing LL - Fifth code - 10 (MSB)"
+        direction TB
+        subgraph " "
+            direction TB
+            L(7f)
+            M(88)
+            N(3d)
+            O("Rest of the buffer")
+            LBF(01)
+            MBF(10001000)
+            NBF(00111101)
+            OBF("Rest of the buffer")
+        end
+        subgraph " "
+            LB(01)
+        end
+        subgraph "Code (MSB)"
+            CA(10)
+        end
 
+        L --> LBF
+        M --> MBF
+        N --> NBF
+        O --> OBF
+
+        LBF --> LB
+        LB --> CA
+    end
+```
 
 
 
