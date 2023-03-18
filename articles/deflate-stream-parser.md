@@ -855,7 +855,9 @@ As you can see the values of the alphabet are only at the leaf nodes. Here is th
 |17|`1111`|`4`|
 |18|`10`|`2`|
 
-With the CL alphabet in place we can start parsing the lengths of the LL and D alphabets. The idea is to parse a bit and look it up in the tree, then repeat the same process until we reach a leaf node. The first code we parse is 18 (`10`). This code means we have to repeat `0` length X number of times. X is equal to 11 + 7bits (LSB order).
+With the CL alphabet in place we can start parsing the lengths of the LL and D alphabets. We need to parse 260 lengths for the LL alphabet and then 7 lengths for the D alphabet. The idea is to parse a single bit and look it up in the tree, then repeat the same process until we reach a leaf node. 
+
+The first code we parse is 18 (`10`). This code means we have to repeat `0` length X number of times. X is equal to 11 + 7bit int (LSB order). The 7bit integer is 86(`1010110`) so the total number of repetitions is 97(11 + 86). This means that the first 97 entries in the LL alphabet have code length of 0. 
 
 ```mermaid
 %%{init: { 'theme':'forest' } }%%
@@ -883,6 +885,9 @@ graph
         subgraph "Code (MSB)"
             CA(10)
         end
+        subgraph "Range (LSB)"
+            RA(1010110)
+        end
 
         I --> IBF
         J --> JBF
@@ -895,41 +900,15 @@ graph
         JBF --> JBB
 
         IB --> CA
+        JB ~~~ CA
         JBB --> CA
 
-    end
-```
-```mermaid
-%%{init: { 'theme':'forest' } }%%
-graph
-    subgraph "Parsing LL - 7 bits in LSB order"
-        direction TB
-        subgraph " "
-            direction TB
-            J(ac)
-            K(a3)
-            L(7f)
-            M("Rest of the buffer")
-            JBF(1010110)
-            KBF(10100011)
-            LBF(01111111)
-            MBF("Rest of the buffer")
-        end
-        subgraph "Number (LSB)"
-            JB(1010110)
-        end
-
-        J --> JBF
-        K --> KBF
-        L --> LBF
-        M --> MBF
-
-        JBF --> JB
+        JB --> RA
 
     end
 ```
 
-The 7 bits represent the number 86(`1010110`), so the total number becomes 97 (11 + 86). This means that the first 97 entries in the LL alphabet have code length of 0. The second code that we parse is 1 (`1100`). This means that the 98th value has a Huffman code with length 1.
+The second code that we parse is 1 (`1100`). This means that the 98th value has a Huffman code with length 1.
 
 ```mermaid
 %%{init: { 'theme':'forest' } }%%
@@ -970,7 +949,7 @@ graph
     end
 ```
 
-The third code that we can parse is `0` and its value is 2. This means that the 99th value of LL has a code length of 2.
+The third code that we parse is 2(`0`). This means that the 99th value of LL alphabet has a code length of 2.
 
 ```mermaid
 %%{init: { 'theme':'forest' } }%%
@@ -1033,9 +1012,14 @@ graph
         subgraph " "
             KB(1)
             KBB(01)
+            LB(01)
+            LBB(111111)
         end
         subgraph "Code (MSB)"
             CA(10)
+        end
+        subgraph "Range (LSB)"
+            RA(1111111)
         end
 
         K --> KBF
@@ -1046,49 +1030,19 @@ graph
 
         KBF --> KB
         KBF --> KBB
+        KB ~~~ CA
         KBB --> CA
+
+        LBF --> LB
+        LBF --> LBB
+        KB --> RA
+        KBB ~~~ RA
+        LB ~~~ RA
+        LBB --> RA
     end
 ```
 
-```mermaid
-%%{init: { 'theme':'forest' } }%%
-graph
-    subgraph "Parsing LL - 7 bits (LSB)"
-        direction TB
-        subgraph " "
-            direction TB
-            K(a3)
-            L(7f)
-            M(88)
-            N(3d)
-            O("Rest of the buffer")
-            KBF(101)
-            LBF(01111111)
-            MBF(10001000)
-            NBF(00111101)
-            OBF("Rest of the buffer")
-        end
-        subgraph " "
-            KB(1)
-            KBB(01)
-        end
-        subgraph "Code (MSB)"
-            CA(10)
-        end
-
-        K --> KBF
-        L --> LBF
-        M --> MBF
-        N --> NBF
-        O --> OBF
-
-        KBF --> KB
-        KBF --> KBB
-        KBB --> CA
-    end
-```
-
-Fifth code is 18 (`10`) again. and the 
+Fifth code is 18 (`10`) again and the 7bit integer is 8 (`0001000`). We have to output 19 lengths of 0.
 
 
 ```mermaid
@@ -1109,9 +1063,14 @@ graph
         end
         subgraph " "
             LB(01)
+            MB(1)
+            MBB(0001000)
         end
         subgraph "Code (MSB)"
             CA(10)
+        end
+        subgraph "Range (LSB)"
+            RA(0001000)
         end
 
         L --> LBF
@@ -1121,17 +1080,128 @@ graph
 
         LBF --> LB
         LB --> CA
+
+        MBF --> MB
+        MBF --> MBB
+        MBB --> RA
+
+    end
+```
+We are now at 256 lengths parased for the LL alphabet. The sixth code is 4 (`1101`), so the 257th length is 4.
+
+```mermaid
+%%{init: { 'theme':'forest' } }%%
+graph
+    subgraph "Parsing LL - Sixth code - 1101 (MSB)"
+        direction TB
+        subgraph " "
+            direction TB
+            M(88)
+            N(3d)
+            O(3c)
+            P(20)
+            Q(2a)
+            R(97)
+            S("Rest of the buffer")
+            MBF(1)
+            NBF(00111101)
+            OBF(00111100)
+            PBF(00100000)
+            QBF(00101010)
+            RBF(10010111)
+            SBF("Rest of the buffer")
+        end
+        subgraph " "
+            MB(1)
+            NB(00111)
+            NBB(101)
+        end
+        subgraph "Code (MSB)"
+            CA(1101)
+        end
+
+        M --> MBF
+        N --> NBF
+        O --> OBF
+        P --> PBF
+        Q --> QBF
+        R --> RBF
+        S --> SBF
+
+        MBF --> MB
+        NBF --> NB
+        NBF --> NBB
+
+        MB --> CA
+        NB ~~~ CA
+        NBB --> CA
+    end
+    
+```
+
+The seventh code 16(`1110`), so we have to copy the previous code length (4) X number of times where X = 3 + 2bit int (LSB). The 2 bit int is 0(`00`).
+
+```mermaid
+%%{init: { 'theme':'forest' } }%%
+graph
+    subgraph "Parsing LL - Seventh code - 1101 (MSB)"
+        direction TB
+        subgraph " "
+            direction TB
+            N(3d)
+            O(3c)
+            P(20)
+            Q(2a)
+            R(97)
+            S("Rest of the buffer")
+            NBF(00111)
+            OBF(00111100)
+            PBF(00100000)
+            QBF(00101010)
+            RBF(10010111)
+            SBF("Rest of the buffer")
+        end
+        subgraph " "
+            NB(0)
+            NBB(0111)
+            OB(0011110)
+            OBB(0)
+        end
+        subgraph "Code (MSB)"
+            CA(1110)
+        end
+        subgraph "Range (LSB)"
+            RA(00)
+        end
+
+        N --> NBF
+        O --> OBF
+        P --> PBF
+        Q --> QBF
+        R --> RBF
+        S --> SBF
+
+        NBF --> NB
+        NBF --> NBB
+        OBF --> OB
+        OBF --> OBB
+
+        NB ~~~ CA
+        NBB --> CA
+
+        NB --> RA
+        NBB ~~~ RA
+        OB ~~~ RA
+        OBB --> RA
     end
 ```
 
+At this point we have parsed the code lengths for the LL alphabet and we have the following
 
+```mermaid
+%%{init: { 'theme':'forest' } }%%
 
-
-
-
-
-
-
+```
 
 
 
