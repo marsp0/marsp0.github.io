@@ -694,9 +694,11 @@ static void test_find_array_element(void)
 
 | JSON File | File Size (KB) | Time (ms) | Memory (KB) |
 | - | - | - | - |
-| [citm_catalog.json](https://github.com/RichardHightower/json-parsers-benchmark/blob/master/data/citm_catalog.json) | `1737` | `19` | `2283`|
-| [canada.json](https://github.com/mloskot/json_benchmark/blob/master/data/canada.json) | `2199` | `46` | `9143`|
-| [large-file.json](https://github.com/json-iterator/test-data/blob/master/large-file.json) | `25528` | `290` | `56426` |
+| [citm_catalog.json](https://github.com/RichardHightower/json-parsers-benchmark/blob/master/data/citm_catalog.json) | `1737` | `10` | `2283`|
+| [canada.json](https://github.com/mloskot/json_benchmark/blob/master/data/canada.json) | `2199` | `29` | `9143`|
+| [large-file.json](https://github.com/json-iterator/test-data/blob/master/large-file.json) | `25528` | `127` | `56426` |
+
+_*large-file.json has an array as root node and the parser does not support that, so I had to add an object root node on top of it in order for the parsing to complete._
 
 ### Notes
 
