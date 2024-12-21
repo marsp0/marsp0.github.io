@@ -23,4 +23,4 @@ Personal website to showcase projects I have worked on and share some knowledge 
 - Github: [https://github.com/marsp0](https://github.com/marsp0)
 
 ## test
-random mathjax expression $P=123$
+random mathjax expression $$ P=123 $$
