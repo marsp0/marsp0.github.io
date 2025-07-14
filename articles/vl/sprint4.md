@@ -19,7 +19,6 @@ void html_parser_run(const unsigned char* buffer, const uint32_t size)
     html_tokenizer_init(buffer, size, tokens, MAX_TOKENS);
 
     mode                        = HTML_PARSER_MODE_INITIAL;
-
     document                    = html_document_new();
 
     while (true)
