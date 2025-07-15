@@ -2,9 +2,9 @@ Personal website to showcase projects I have worked on and share some knowledge 
 
 ## Projects
 
-- [**Phong Software Renderer**](https://github.com/marsp0/phong-software-renderer) - software renderer that supports Gouraud/Phong interpolation models and Phong/BlinnPhong reflection models.
-- [**PBR Software Renderer**](https://github.com/marsp0/pbr-software-renderer) - software renderer that supports the PBR shading model.
 - [**VL Browser**](https://github.com/marsp0/vl-browser) - Web browser. The goal of the project is to provide a minimal functioning browser without all the bloat.
+- [**PBR Software Renderer**](https://github.com/marsp0/pbr-software-renderer) - software renderer that supports the PBR shading model.
+- [**Phong Software Renderer**](https://github.com/marsp0/phong-software-renderer) - software renderer that supports Gouraud/Phong interpolation models and Phong/BlinnPhong reflection models.
 
 ## Articles
 
