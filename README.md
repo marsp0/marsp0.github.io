@@ -8,9 +8,9 @@ Personal website to showcase projects I have worked on and share some knowledge 
 
 ## Articles
 
-- [Simple JSON Parser](articles/simple-json-parser.md)
-- [Deriving Camera Transform](articles/deriving-camera-transform.md)
 - [VL Browser - Series](articles/vl/list.md)
+- [Deriving Camera Transform](articles/deriving-camera-transform.md)
+- [Simple JSON Parser](articles/simple-json-parser.md)
 
 ## Random
 
