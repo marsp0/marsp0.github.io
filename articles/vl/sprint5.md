@@ -7,7 +7,7 @@ _14.07.2025 - 27.07.2025; TODOh_
 
 The plan is to go back to testing the parser, i am not familiar with how the node interfaces will look in the end so for now its better to just test from the perspective of the parser.
 
-### I will continue with the same test from 15.07.2025. Goals
+#### Part 1 - I will continue with the same test from 15.07.2025. Goals
 
 - [x] assert tree structure
 - [x] assert local name
@@ -19,7 +19,7 @@ stretch goal:
 - [x] assert name
 - [x] assert namespace
 
-### Secondary goal
+#### Part 2 -  Secondary goal
 
 Make below test pass
 
