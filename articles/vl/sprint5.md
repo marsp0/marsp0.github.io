@@ -3,6 +3,47 @@ _14.07.2025 - 27.07.2025; TODOh_
 
 > Disclaimer: Please take everything I write here with a grain of salt—I'm by no means an expert. Some of these concepts I'm encountering for the first time, and my understanding might have significant gaps—and that's okay. It's one of the reasons I decided to take on this project. If you see anything wrong, let me know and I'll fix it.
 
+## 20.05.25
+
+The plan is to go back to testing the parser, i am not familiar with how the node interfaces will look in the end so for now its better to just test from the perspective of the parser.
+
+### I will continue with the same test from 15.07.2025. Goals
+
+- [x] assert tree structure
+- [x] assert local name
+- [x] assert tag name
+- [x] assert type
+
+stretch goal:
+
+- [x] assert name
+- [x] assert namespace
+
+### Secondary goal
+
+Make below test pass
+
+```c
+// #data
+// <p>One<p>Two
+// #errors
+// (1,3): expected-doctype-but-got-start-tag
+// #document
+// | <html>
+// |   <head>
+// |   <body>
+// |     <p>
+// |       "One"
+// |     <p>
+// |       "Two"
+```
+
+At the moment, the above test produces a wrong tree. The second P element is placed under the first, as opposed to alongside it. This is because the code does not perform necessary scope checks.
+
+## 19.05.25 - day off
+
+## 18.05.25 - day off
+
 ## 17.07.25
 
 Goal for today is to create some tests for node.c
