@@ -40,6 +40,8 @@ Make below test pass
 
 At the moment, the above test produces a wrong tree. The second P element is placed under the first, as opposed to alongside it. This is because the code does not perform necessary scope checks.
 
+__html/parser.c:1057__ - this is where the fix should be placed.
+
 ## 19.05.25 - day off
 
 ## 18.05.25 - day off
