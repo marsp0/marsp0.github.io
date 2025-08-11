@@ -2,6 +2,7 @@
 
 Each article below will be covering the work done during the sprint (2 weeks).
 
+- [Sprint 6 - HTML Tree Construction - Part 3](sprint6.md)
 - [Sprint 5 - HTML Tree Construction - Part 2](sprint5.md)
 - [Sprint 4 - HTML Tree Construction](sprint4.md)
 - [Sprint 3 - HTML Tokenization and Testing Again](sprint3.md)
