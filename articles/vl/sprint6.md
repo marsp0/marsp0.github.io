@@ -135,19 +135,15 @@ As im adding more tests from the html5lib-tests repo i gave up on naming and i s
     html_node_t* select     = html_element_new(document, "select", 6);
     html_node_t* o1         = html_element_new(document, "option", 6);
     html_node_t* o2         = html_element_new(document, "option", 6);
-    html_node_t* b1         = html_element_new(document, "b", 1);
-    html_node_t* b2         = html_element_new(document, "b", 1);
     html_node_t* t          = html_text_new(document, "X", 1);
 
     APPEND_TO_TREE(document, html);
     APPEND_TO_TREE(html, head);
     APPEND_TO_TREE(html, body);
     APPEND_TO_TREE(body, select);
-    APPEND_TO_TREE(body, b2);
-    APPEND_TO_TREE(body, t);
-    APPEND_TO_TREE(select, b1);
-    APPEND_TO_TREE(b1, o1);
-    APPEND_TO_TREE(b2, o2);
+    APPEND_TO_TREE(select, o1);
+    APPEND_TO_TREE(body, o2);
+    APPEND_TO_TREE(o2, t);
 
     RUN_TEST_AND_ASSERT_DOCUMENT(buffer, document);
 ```
