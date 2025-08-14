@@ -98,8 +98,6 @@ Don't worry about the calls to `strncmp`, it will be replaced with another utili
 
 Spec: [Adoption agency algorithm](https://html.spec.whatwg.org/multipage/parsing.html#adoption-agency-algorithm)
 
-This is yet another mechanism used to fix misnested content. This is the most involved one as it can move children around. In contrast, the reconstruction of active elements works under the current node (w/e it is). The scope checks only tell you if an element is in scope, the logic that actually does anything else is different depending on the token and its not part of the scope check itself.
-
 This is yet another mechanism for fixing misnested content, and it’s the most involved one because it can actually move child nodes around. By contrast, reconstruction of active formatting elements only operates under the current node, whatever that may be. Scope checks, on the other hand, simply tell you whether an element is in scope—they don’t modify the DOM directly. Any additional actions depend on the specific token being processed, and those steps are separate from the scope check itself.
 
 This algorithm attempts to rehome nodes in a unified, consistent way. I haven’t fully tested my implementation yet, so I’m not including the code here.
