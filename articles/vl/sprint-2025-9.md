@@ -1,6 +1,8 @@
 # HTML Tree Construction - Part 5
 _08.09.2025 - 21.09.2025_
 
+> Disclaimer: Please take everything I write here with a grain of salt—I'm by no means an expert. Some of these concepts I'm encountering for the first time, and my understanding might have significant gaps—and that's okay. It's one of the reasons I decided to take on this project. If you see anything wrong, let me know and I'll fix it.
+
 Nothing different in this sprint compared to the last 3 tbh. I've added the remaining tests from `tests1.dat` - almost 50. No major issues, just some steps missing here and there.
 
 ## Added sections
