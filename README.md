@@ -22,5 +22,7 @@ Personal website to showcase projects I have worked on and share some knowledge 
 - Linkedin: [https://www.linkedin.com/in/martin-spasov-b589a1a3/](https://www.linkedin.com/in/martin-spasov-b589a1a3/)
 - Github: [https://github.com/marsp0](https://github.com/marsp0)
 
+## Sponsor
 
-<iframe src="https://github.com/sponsors/marsp0/card" title="Sponsor marsp0" height="225" width="600" style="border: 0;"></iframe>
+If you would like to support my work you can do so here:
+- [Github Sponsors](https://github.com/sponsors/marsp0)
