@@ -2,6 +2,7 @@
 
 Each article below will be covering the work done during the sprint (2 weeks).
 
+- [Sprint 2025.13 - Math/SVG tag support + css tokenizer](sprint-2025-13.md)
 - [Sprint 2025.12 - Further improvements to the tokenizer and parser](sprint-2025-12.md)
 - [Sprint 2025.11 - Automated test runners - Part 2](sprint-2025-11.md)
 - [Sprint 2025.10 - Automated test runners](sprint-2025-10.md)
