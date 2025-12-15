@@ -2,6 +2,7 @@
 
 Each article below will be covering the work done during the sprint (2 weeks).
 
+- [Sprint 2025.15 - CSS Tokenizer v2](sprint-2025-15.md)
 - [Sprint 2025.14 - CSS Tokenizer v1](sprint-2025-14.md)
 - [Sprint 2025.13 - Math/SVG tag support + css tokenizer](sprint-2025-13.md)
 - [Sprint 2025.12 - Further improvements to the tokenizer and parser](sprint-2025-12.md)
